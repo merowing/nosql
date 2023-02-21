@@ -1,4 +1,4 @@
-const { PATH_TO_DATABASE_FILE } = require('./../defaults');
+const { PATH_TO_DATABASE_FILE, PATH_TO_DATABASE_FOLDER } = require('./../defaults');
 
 module.exports = function () {
     let data = [];
@@ -17,14 +17,19 @@ module.exports = function () {
                     const split_path = current.path.split('\\');
                     const database = split_path[0];
                     const table = split_path[1];
-                    const row = `${filename}.json`;
-                    const path = `${database}\\${table}\\${row}`;
+                    const row = filename;
+
+                    const path = `${database}\\${table}\\${row}.json`;
+                    let data = this._read_file(`${PATH_TO_DATABASE_FOLDER}\\${path}`);
+                    if(data) {
+                        data = JSON.parse(data);
+                    }
 
                     paths.push({
                         database,
                         table,
                         row,
-                        path
+                        data,
                     });
                 });
 
