@@ -2,11 +2,43 @@ module.exports = function(count = 0, len = 0) {
     let rows = this._rows;
     let max_items = rows.length;
 
-    if(len > 0) {
-        rows = rows.slice(count, count + len);
-    }
     if(!this._selected_database || !this._selected_table) {
         rows = [];
+    }
+
+    if(this._sortby.length) {
+        let [ param, type ] = this._sortby;
+        let temp_rows = rows.reduce((sorted_rows, item) => {
+            const path_to_file = `${this._path}\\${item}.json`;
+            const file = this._read_file(path_to_file);
+            const json = JSON.parse(file);
+
+            const val = json[param];
+            if(val) {
+                sorted_rows.push([val, item]);
+            }
+
+            return sorted_rows;
+        }, []);
+
+        for(let i = 0; i < temp_rows.length - 1; i++) {
+            if(temp_rows[i][0] > temp_rows[i+1][0]) {
+                let temp = temp_rows[i+1];
+                temp_rows[i+1] = temp_rows[i];
+                temp_rows[i] = temp;
+                i = -1;
+            }
+        }
+        
+        if(type === 'desc') {
+            temp_rows.reverse();
+        }
+
+        rows = temp_rows.map(item => item[1]);
+    }
+
+    if(len > 0) {
+        rows = rows.slice(count, count + len);
     }
 
     let data = [];

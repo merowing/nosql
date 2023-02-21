@@ -18,6 +18,7 @@ module.exports = function (name = null) {
 
         this._lint = this._lint[name];
         this._selected_table = name;
+        this._rows = [...this._lint.rows];
     }
 
     return this;

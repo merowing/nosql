@@ -1,7 +1,8 @@
 module.exports = function (data) {
-    let rows = [];
-    if (!this._selected_database) {
-        return rows;
+    this._rows = [];
+    
+    if (!this._selected_database || !this._selected_table) {
+        return this;
     }
 
     if (data && typeof data === 'object' && !Array.isArray(data)) {
@@ -91,25 +92,14 @@ module.exports = function (data) {
                     }
 
                     if (found) {
-                        rows.push(file_info);
+                        this._rows.push(file[i]);
                     }
                 }
             }
         }
     } else {
-        const items = this._lint.rows;
-            
-        rows = items.map(item => {
-            const info = this._read_file(this._path + '\\' + item + '.json', {encoding: 'utf8', flag: 'r'});
-            if (info) {
-                return JSON.parse(info);
-            }
-
-            return {};
-        });
-
-        rows = [...rows];
+        this._rows = [...this._lint.rows];
     }
 
-    return rows;
+    return this;
 }

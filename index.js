@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { PATH_TO_DATABASE_FILE, PATH_TO_DATABASE_FOLDER } = require('./defaults.js');
-const { select, table, insert, remove, find, clean, all, get } = require('./methods');
+const { select, table, insert, remove, find, clean, all, get, sortby } = require('./methods');
 
 const db = {
     _selected_database: null,
@@ -9,7 +9,7 @@ const db = {
     _database: {},
     _path: PATH_TO_DATABASE_FOLDER,
     _rows: [],
-    _sortby: null,
+    _sortby: [],
     
     _check_available_database(name) {
         return this._database[name] === undefined;
@@ -58,7 +58,7 @@ const db = {
         this._path = PATH_TO_DATABASE_FOLDER;
         this._lint = null;
         this._rows = [];
-        this._sortby = null;
+        this._sortby = [];
     },
     
     _file_exists(path) {
@@ -90,5 +90,6 @@ db.remove = remove;
 db.clean = clean;
 db.all = all;
 db.get = get;
+db.sortby = sortby;
 
 module.exports = db;
