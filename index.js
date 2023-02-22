@@ -5,7 +5,7 @@ const { select, table, insert, remove, find, clean, all, get, sortby } = require
 const db = {
     _selected_database: null,
     _selected_table: null,
-    _lint: null,
+    _lint: {},
     _database: {},
     _path: PATH_TO_DATABASE_FOLDER,
     _rows: [],
@@ -56,7 +56,7 @@ const db = {
         this._selected_database = null;
         this._selected_table = null;
         this._path = PATH_TO_DATABASE_FOLDER;
-        this._lint = null;
+        this._lint = {};
         this._rows = [];
         this._sortby = [];
     },

@@ -8,7 +8,6 @@ module.exports = function (data) {
     if (data && typeof data === 'object' && !Array.isArray(data)) {
         const object_data_keys = Object.keys(data);
         const unique_id_name = 'id';
-        const len = this._lint.length;
         let files = [];
 
         if (Object.hasOwn(data, unique_id_name) && data[unique_id_name]) {
@@ -28,8 +27,6 @@ module.exports = function (data) {
                     let found = false;
 
                     if (object_data_keys.length > 0) {
-                        const regex_data_number = /^\s?([>|<|=]{1,2})?\s?[0-9]+\s?$/;
-
                         for (let key of object_data_keys) {
                             if (!Object.hasOwn(file_info, key)) continue;
 
@@ -38,26 +35,27 @@ module.exports = function (data) {
                                 continue;
                             }
 
-                            if (!/(<|>|=)\s?[0-9]/.test(data[key]) && key !== 'name' && data[key] !== '') {
-                                const regex_condition = `\\b${data[key].replace(/,\s?/g, '|')}\\b`;
-                                const regex = new RegExp(regex_condition, 'i');
+                            if (!/(<|>|=)\s?[0-9]/.test(data[key]) && key !== 'name') {
+                                found = false;
 
                                 if (file_info[key] !== undefined) {
+                                    const regex_condition = `\\b${data[key].replace(/,\s?/g, '|')}\\b`;
+                                    const regex = new RegExp(regex_condition, 'i');
+
                                     found = file_info[key].toLowerCase().search(regex) !== -1;
-                                } else {
-                                    found = false;
                                 }
                             }
 
                             if (key === 'name') {
-                                found = file_info[key].toLowerCase().indexOf(data[key].toLowerCase()) !== -1;
+                                found = file_info[key].toLowerCase().indexOf( data[key].toLowerCase() ) !== -1;
                             }
 
                             if (/(<|>|=)\s?[0-9]/.test(data[key])) {
                                 const conditions = data[key].split(/,\s?/);
                                 
-                                for(let condition of conditions) {
+                                for (let condition of conditions) {
                                     const data_num = condition.match(/[0-9]+/);
+                                    const regex_data_number = /^\s?([>|<|=]{1,2})?\s?[0-9]+\s?$/;
                                     const symbol_str = condition.match(regex_data_number);
 
                                     const compare = {

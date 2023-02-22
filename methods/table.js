@@ -1,6 +1,6 @@
 module.exports = function (name = null) {
     if (name && this._selected_database) {
-        this._path += '\\' + name;
+        this._path += `\\${name}`;
 
         if (this._check_available_table(name) && this._check_available_table(name) !== null) {
             this._lint[name] = {
