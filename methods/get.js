@@ -21,14 +21,7 @@ module.exports = function(count = 0, len = 0) {
             return sorted_rows;
         }, []);
 
-        for(let i = 0; i < temp_rows.length - 1; i++) {
-            if(temp_rows[i][0] > temp_rows[i+1][0]) {
-                let temp = temp_rows[i+1];
-                temp_rows[i+1] = temp_rows[i];
-                temp_rows[i] = temp;
-                i = -1;
-            }
-        }
+        temp_rows.sort();
         
         if(type === 'desc') {
             temp_rows.reverse();

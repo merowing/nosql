@@ -9,16 +9,16 @@ module.exports = function (data) {
         const object_data_keys = Object.keys(data);
         const unique_id_name = 'id';
         const len = this._lint.length;
-        let file = [];
+        let files = [];
 
         if (Object.hasOwn(data, unique_id_name) && data[unique_id_name]) {
-            file = [data[unique_id_name]];
+            files = [data[unique_id_name]];
         } else {
-            file = [...this._lint.rows];
+            files = [...this._lint.rows];
         }
 
-        for (let i = 0; i < len; i++) {
-            const path_to_file = `${this._path}\\${file[i]}.json`;
+        files.forEach(file => {
+            const path_to_file = `${this._path}\\${file}.json`;
 
             if (this._file_exists(path_to_file)) {
                 let file_info = this._read_file(path_to_file, {encoding: 'utf8', flag: 'r'});
@@ -30,8 +30,7 @@ module.exports = function (data) {
                     if (object_data_keys.length > 0) {
                         const regex_data_number = /^\s?([>|<|=]{1,2})?\s?[0-9]+\s?$/;
 
-                        for (let i = 0; i < object_data_keys.length; i++) {
-                            const key = object_data_keys[i];
+                        for (let key of object_data_keys) {
                             if (!Object.hasOwn(file_info, key)) continue;
 
                             if (data[key] === '') {
@@ -56,10 +55,10 @@ module.exports = function (data) {
 
                             if (/(<|>|=)\s?[0-9]/.test(data[key])) {
                                 const conditions = data[key].split(/,\s?/);
-                                for (let i = 0; i < conditions.length; i++) {
-                                    const data_num = conditions[i].match(/[0-9]+/);
-                                    
-                                    const symbol_str = conditions[i].match(regex_data_number);
+                                
+                                for(let condition of conditions) {
+                                    const data_num = condition.match(/[0-9]+/);
+                                    const symbol_str = condition.match(regex_data_number);
 
                                     const compare = {
                                         '>': function(num1, num2) {
@@ -92,11 +91,11 @@ module.exports = function (data) {
                     }
 
                     if (found) {
-                        this._rows.push(file[i]);
+                        this._rows.push(file);
                     }
                 }
             }
-        }
+        });
     } else {
         this._rows = [...this._lint.rows];
     }
