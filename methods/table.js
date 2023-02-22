@@ -2,7 +2,7 @@ module.exports = function (name = null) {
     if (name && this._selected_database) {
         this._path += `\\${name}`;
 
-        if (this._check_available_table(name) && this._check_available_table(name) !== null) {
+        if (this._check_available_table(name)) {
             this._lint[name] = {
                 rows: [],
                 length: 0,
@@ -11,7 +11,7 @@ module.exports = function (name = null) {
 
             this._create_direcotry();
         } else {
-            if(!this._check_available_table(name)) {
+            if (!this._check_available_table(name)) {
                 this._create_direcotry();
             }
         }
@@ -19,6 +19,7 @@ module.exports = function (name = null) {
         this._lint = this._lint[name];
         this._selected_table = name;
         this._rows = [...this._lint.rows];
+
     }
 
     return this;

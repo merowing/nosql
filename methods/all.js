@@ -4,33 +4,37 @@ module.exports = function () {
     const json_database = this._read_file(PATH_TO_DATABASE_FILE, {encoding: 'utf8', flag: 'r'});
     let data = [];
 
-    if (json_database && !Array.isArray(json_database) && typeof json_database === 'object') {
-        data = recursive_object( JSON.parse(json_database) )
-            .filter(item => item.value)
-            .filter(item => item.path.indexOf('length') === -1)
-            .reduce((paths, current) => {
-                current.value.forEach(row => {
-                    const split_path = current.path.split('\\');
-                    const database = split_path[0];
-                    const table = split_path[1];
-                    const path = `${database}\\${table}\\${row}.json`;
+    if (json_database) {
+        const json = JSON.parse(json_database);
 
-                    let file_data = this._read_file(`${PATH_TO_DATABASE_FOLDER}\\${path}`);
+        if (typeof json === 'object' && !Array.isArray(json)) {
+            data = recursive_object( json )
+                .filter(item => item.value)
+                .filter(item => item.path.indexOf('length') === -1)
+                .reduce((paths, current) => {
+                    current.value.forEach(row => {
+                        const split_path = current.path.split('\\');
+                        const database = split_path[0];
+                        const table = split_path[1];
+                        const path = `${database}\\${table}\\${row}.json`;
 
-                    file_data = (file_data)
-                        ? JSON.parse(file)
-                        : [];
+                        let file_data = this._read_file(`${PATH_TO_DATABASE_FOLDER}\\${path}`);
 
-                    paths.push({
-                        database,
-                        table,
-                        row,
-                        data: file_data,
+                        file_data = (file_data)
+                            ? JSON.parse(file_data)
+                            : [];
+
+                        paths.push({
+                            database,
+                            table,
+                            row,
+                            data: file_data,
+                        });
                     });
-                });
 
-                return paths;
-            }, []);
+                    return paths;
+                }, []);
+        }
     }
 
     return data;
@@ -41,7 +45,7 @@ function recursive_object(o, arr = [], n = 0, chain = []) {
     chain.push(keys[n]);
   
     if (typeof o[keys[n]] === 'object' && !Array.isArray(o[keys[n]])) {
-        rec(o[keys[n]], arr, 0, chain);
+        recursive_object(o[keys[n]], arr, 0, chain);
     } else {
         arr.push({
             path: chain.join('\\'),
@@ -52,7 +56,7 @@ function recursive_object(o, arr = [], n = 0, chain = []) {
     if (n < keys.length - 1) {
         chain.splice(-1);
         n++;
-        rec(o, arr, n, chain);
+        recursive_object(o, arr, n, chain);
     } else {
         chain.splice(-1);
     }

@@ -26,16 +26,20 @@ const db = {
     
     _read_database() {
         this._reset_default();
-        
+
         if (!fs.existsSync(PATH_TO_DATABASE_FILE)) {
             this._save_database();
         }
 
         const file = this._read_file(PATH_TO_DATABASE_FILE, {encoding: 'utf8', flag: 'r'});
 
-        this._database = (typeof file === 'object' && !Array.isArray(file))
-            ? JSON.parse(file)
-            : {};
+        this._database = {};
+        if(file) {
+            const json = JSON.parse(file);
+            this._database = (json && typeof json === 'object' && !Array.isArray(json))
+                ? json
+                : {};
+        }
     },
     
     _create_direcotry() {

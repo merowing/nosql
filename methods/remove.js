@@ -2,8 +2,6 @@ const { PATH_TO_DATABASE_FILE } = require("../defaults");
 
 module.exports = function (id = null) {
     try {
-        if (!this._selected_database || !this._selected_table) return false;
-
         if (id && typeof id === 'string') {
             const delete_index = this._lint.rows.indexOf(id);
 
@@ -13,7 +11,7 @@ module.exports = function (id = null) {
                 
                 this._save_database();
                 this._remove_file(`${this._path}//${id}.json`);
-            }else {
+            } else {
                 return false;
             }
         } else {

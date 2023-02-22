@@ -7,6 +7,7 @@ module.exports = function (name = null) {
     if (name && this._check_available_database(name)) {
         this._database[name] = {};
         this._save_database();
+
         this._create_direcotry();
     }
 

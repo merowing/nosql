@@ -1,9 +1,5 @@
 module.exports = function (data) {
     this._rows = [];
-    
-    if (!this._selected_database || !this._selected_table) {
-        return this;
-    }
 
     if (data && typeof data === 'object' && !Array.isArray(data)) {
         const object_data_keys = Object.keys(data);
@@ -22,7 +18,7 @@ module.exports = function (data) {
 
             if (file_info) {
                 file_info = JSON.parse(file_info);
-                let found = false;
+                let found = true;
 
                 if (object_data_keys.length > 0) {
                     for (let key of object_data_keys) {
@@ -92,7 +88,9 @@ module.exports = function (data) {
             }
         });
     } else {
-        this._rows = [...this._lint.rows];
+        if(this._selected_database && this._selected_table) {
+            this._rows = [...this._lint.rows];
+        }
     }
 
     return this;
