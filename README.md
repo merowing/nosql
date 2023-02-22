@@ -12,7 +12,7 @@ This is the NoSQL database implemented on the file structure. This version of da
 
 ### Example
 
-```
+```javascript
 const nosql = require('./nosql');
 
 nosql.select('test').table('table_1').insert({
@@ -27,25 +27,37 @@ console.log(nosql.select('test').table('table_1').get());
 ### Methods and how to use them:
 <br>
 
+```javascript
+// remove all databases
+db.remove()
+// remove database
+db.select('database').remove()
+// remove table
+db.select('database').table('table').remove()
+// remove row by id
+db.select('database').table('table').remove('id')
+// clean table
+db.select('database').table('table').clean()
 ```
-db.remove() - remove all databases
-db.select('database').remove() - remove database
-db.select('database').table('table').remove() - remove table
-db.select('database').table('table').remove('id') - remove row by id
-db.select('database').table('table').clean() - clean table
+```javascript
+// create or select database
+db.select('database')
+// create or select table
+db.select('database').table('table')
+// insert data to row
+db.select('database').table('table').insert({})
 ```
-```
-db.select('database') - create or select database
-db.select('database').table('table') - create or select table
-db.select('database').table('table').insert({}) - insert data to row
-```
-```
-db.select('database').table('table').get() - return all data from the table
+```javascript
+// return all data from the table
+db.select('database').table('table').get()
+// show the rows where the number more or equal 2000 and less or equal 3000
 db.select('database').table('table').find({ any: '>=2000, <=3000' }).get()
-- show the rows where the number more or equal 2000 and less or equal 3000
-db.select('database').table('table').get(20, 10) - get next 10 rows from 20 to 30
-db.select('database').table('table').sortby(value, 'desc').get() - sort data by value
-db.all() - get all row paths in all databases
+// get next 10 rows from 20 to 30
+db.select('database').table('table').get(20, 10)
+// sort data by value
+db.select('database').table('table').sortby(value, 'desc').get()
+// get all row paths in all databases
+db.all()
 ```
 
 <br>
@@ -54,7 +66,7 @@ db.all() - get all row paths in all databases
 <br>
 
 1. Insert data to database
-```
+```javascript
 db.select('database').table('table').insert({ id: '1', name: 'test', price: '100', url: 'https' });
 ```
 id must be a unique number.\
@@ -62,7 +74,7 @@ if you add data without id, id will be automatically added to the inserted data 
 <br><br>
 
 2. Find data
-```
+```javascript
 db.select('database').table('table').find({ id: '1'}).get() ->
 {
   data: [
@@ -72,7 +84,7 @@ db.select('database').table('table').find({ id: '1'}).get() ->
   max_items: 1
 }
 ```
-```
+```javascript
 db.select('database').table('table').find({ name: 'test', price: '<500' }).get() ->
 {
   data: [
@@ -84,32 +96,33 @@ db.select('database').table('table').find({ name: 'test', price: '<500' }).get()
 }
 ```
 3. Remove table
-```
-/database/table/rows
-/database/table_2/rows
-/database/table_3/rows
 
+/database/table/rows\
+/database/table_2/rows\
+/database/table_3/rows
+```javascript
 db.select('database').table('table').remove() ->
-
-after:
-/database/table_2/rows
+```
+after:\
+/database/table_2/rows\
 /database/table_3/rows
-```
+<br><br>
+
 4. Get data by 10 rows
-```
+```javascript
 db.select('database').table('table').find({ name: 'test', price: '<500' }).get(0, 10);
 ```
 you will get first ten or less rows which respond filter
 <br><br>
 
-```
+```javascript
 db.select('database').table('table').find({ name: 'test', price: '<500' }).get(10, 10);
 ```
 you will get next ten rows and so on
 <br><br>
 
 5. Sort data
-```
+```javascript
 db.select('database').table('table').sortby('price').get() ->
 {
   data: [
@@ -121,7 +134,7 @@ db.select('database').table('table').sortby('price').get() ->
   max_items: 3
 }
 ```
-```
+```javascript
 db.select('database').table('table').sortby('name').get() ->
 {
   data: [
@@ -137,12 +150,12 @@ you can set the second value in sortby method: 'desc', default - 'asc'
 <br><br>
 
 6. Combine
-```
+```javascript
 db.select('database').table('table').sortby('price', 'desc').find({ name: 'test' }).get(0, 1);
 ```
 
 7. Get all data
-```
+```javascript
 db.all() ->
 [
   {
