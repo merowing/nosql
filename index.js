@@ -12,12 +12,12 @@ const db = {
     _sortby: [],
     
     _check_available_database(name) {
-        return this._database[name] === undefined;
+        return this._database[name] === undefined || !fs.existsSync(`${this._path}`);
     },
     
     _check_available_table(name) {
         if (!this._selected_database) return null;
-        return this._database[this._selected_database][name] === undefined;
+        return this._database[this._selected_database][name] === undefined || !fs.existsSync(`${this._path}`);
     },
     
     _save_database() {
