@@ -22,7 +22,8 @@ db.select('database').table('table').insert({}) - insert data to row
 ```
 ```
 db.select('database').table('table').get() - return all data from the table
-db.select('database').table('table').find({ any: '>=2000, <=3000' }).get() - show the rows where the number more or equal 2000 and less or equal 3000
+db.select('database').table('table').find({ any: '>=2000, <=3000' }).get()
+- show the rows where the number more or equal 2000 and less or equal 3000
 db.select('database').table('table').get(20, 10) - get next 10 rows from 20 to 30
 db.select('database').table('table').sortby(value, 'desc').get() - sort data by value
 db.all() - get all row paths in all databases
