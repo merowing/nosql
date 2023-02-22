@@ -5,6 +5,25 @@ This is the NoSQL database implemented on the file structure. This version of da
 
 <br>
 
+### Install
+
+1. git clone
+2. connect nosql DB to project: require('./nosql')
+
+### Example
+
+```
+const nosql = require('./nosql');
+
+nosql.select('test').table('table_1').insert({
+    id: 132423,
+    name: 'test',
+});
+console.log(nosql.select('test').table('table_1').get());
+```
+
+<br>
+
 ### Methods and how to use them:
 <br>
 
