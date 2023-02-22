@@ -61,12 +61,12 @@ const db = {
         this._sortby = [];
     },
     
-    _file_exists(path) {
-        return fs.existsSync(path);
-    },
-    
     _read_file(path, options = {}) {
-        return fs.readFileSync(path, options);
+        if(fs.existsSync(path)) {
+            return fs.readFileSync(path, options);
+        }
+
+        return false;
     },
 
     _remove_file(path) {

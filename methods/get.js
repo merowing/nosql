@@ -8,15 +8,18 @@ module.exports = function(count = 0, len = 0) {
 
     if(this._sortby.length) {
         const [ param, type ] = this._sortby;
-        
+
         const temp_rows = rows.reduce((sorted_rows, item) => {
             const path_to_file = `${this._path}\\${item}.json`;
             const file = this._read_file(path_to_file);
-            const json = JSON.parse(file);
+            
+            if(file) {
+                const json = JSON.parse(file);
+                const val = json[param];
 
-            const val = json[param];
-            if(val) {
-                sorted_rows.push([val, item]);
+                if(val) {
+                    sorted_rows.push([val, item]);
+                }
             }
 
             return sorted_rows;

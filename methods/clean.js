@@ -1,10 +1,12 @@
 module.exports = function () {
     try {
+        if(!this._selected_database && !this._selected_table) return false;
+
         if (this._selected_database && !this._selected_table) {
             this._database[this._selected_database] = {};
         }
 
-        if (this._selected_table) {
+        if (this._selected_database && this._selected_table) {
             this._database[this._selected_database][this._selected_table] = {
                 rows: [],
                 length: 0,
