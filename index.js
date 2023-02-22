@@ -26,13 +26,14 @@ const db = {
     
     _read_database() {
         this._reset_default();
-        if (!this._file_exists(PATH_TO_DATABASE_FILE)) {
+        
+        if (!fs.existsSync(PATH_TO_DATABASE_FILE)) {
             this._save_database();
         }
 
-        const file = fs.readFileSync(PATH_TO_DATABASE_FILE, {encoding: 'utf8', flag: 'r'});
+        const file = this._read_file(PATH_TO_DATABASE_FILE, {encoding: 'utf8', flag: 'r'});
 
-        this._database = file
+        this._database = (typeof file === 'object' && !Array.isArray(file))
             ? JSON.parse(file)
             : {};
     },
@@ -70,13 +71,13 @@ const db = {
     },
 
     _remove_file(path) {
-        if (this._file_exists(path)) {
+        if (fs.existsSync(path)) {
             fs.unlinkSync(path);
         }
     },
 
     _remove_folder(path) {
-        if (this._file_exists(path)) {
+        if (fs.existsSync(path)) {
             fs.rmSync(path, { recursive: true, force: true });
         }
     },
