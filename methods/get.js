@@ -26,9 +26,13 @@ module.exports = function(count = 0, len = 0) {
         }, []);
 
         temp_rows.sort((a, b) => {
-            return (type === 'desc')
-                ? b[0] - a[0]
-                : a[0] - b[0];
+            let condition = (type === 'desc')
+                ? b[0] > a[0]
+                : a[0] > b[0];
+
+            return (condition)
+                ? 1
+                : -1;
         });
 
         rows = temp_rows.map(item => item[1]);
